@@ -26,7 +26,7 @@ class RecordPenjualan extends Model
 
     public function barang()
     {
-        return $this->hasOne(ListPembelianBarang::class, 'id_record_penjualan', 'id')->with('detailBarang');
+        return $this->hasMany(ListPembelianBarang::class, 'id_record_penjualan', 'id')->with('detailBarang');
     }
 
     public function kategoriPembelian()
