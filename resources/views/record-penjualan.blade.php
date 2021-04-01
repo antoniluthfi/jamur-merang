@@ -50,8 +50,8 @@
 
             <tr>
                 <td class="text-center display-6">#</td>
-                <td class="text-center display-6">Call: {{ count($data) == 0 ? "" : $item->kunjungan }}</td>
-                <td class="text-center display-6">EC: {{ count($data) == 0 ? "" : $item->kunjungan_efektif }}</td>
+                <td class="text-center display-6">Call: {{ count($data) == 0 ? "" : $kunjungan[0]->kunjungan }}</td>
+                <td class="text-center display-6">EC: {{ count($data) == 0 ? "" : $kunjungan[0]->kunjungan_efektif }}</td>
                 <td colspan="2" class="text-center display-6">Total</td>
                 <td class="text-center display-6">{{ $jumlah }}</td>
                 <td class="text-center display-6">Rp. {{ number_format($total) }}</td>

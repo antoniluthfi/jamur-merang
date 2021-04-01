@@ -10,8 +10,8 @@ class CetakLaporanController extends Controller
 {
     public function cetakLaporan($tipeLaporan, $id_sales, $dari, $sampai)
     {
-        $dari = "$dari 00:00:00";
-        $sampai = "$sampai 23:59:59";
+        $dari = date("$dari 00:00:00");
+        $sampai = date("$sampai 23:59:59");
         
         if($tipeLaporan === 'record-penjualan') {
             $data = DB::select("SELECT 
@@ -19,8 +19,6 @@ class CetakLaporanController extends Controller
                     DATE_FORMAT(record_penjualan.created_at, '%Y-%m-%d') AS day, 
                     users.name, 
                     record_penjualan.area, 
-                    record_penjualan.kunjungan, 
-                    record_penjualan.kunjungan_efektif, 
                     data_barang.nama_barang, 
                     list_pembelian_barang.jumlah, 
                     (list_pembelian_barang.jumlah * data_barang.harga_retail) AS harga,
@@ -32,9 +30,21 @@ class CetakLaporanController extends Controller
                 WHERE (record_penjualan.created_at BETWEEN '$dari' AND '$sampai')
                 AND record_penjualan.user_id = '$id_sales'"
             );
+
+            $data2 = DB::select("SELECT 
+                SUM(kunjungan) AS kunjungan, 
+                SUM(kunjungan_efektif) AS kunjungan_efektif, 
+                created_at FROM record_penjualan 
+                GROUP BY user_id 
+                HAVING (created_at BETWEEN '$dari' AND '$sampai')
+                AND user_id = '$id_sales'
+            ");
         }
         
-        $array = ['data' => $data];
+        $array = [
+            'data' => $data,
+            'kunjungan' => $data2
+        ];
 
         $pdf = PDF::loadView($tipeLaporan, $array, [], [
             'mode'                 => '',
